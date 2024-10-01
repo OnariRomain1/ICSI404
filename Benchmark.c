@@ -16,6 +16,10 @@ float main(){
     long long j;
     double start;
     double end;
+    double wtick; 
+
+    wtick = omp_get_wtick();
+
     // allocating memmory 
     z = (double *)_mm_malloc(SIZE *sizeof(double), 64);
     a = (double *)_mm_malloc(SIZE *sizeof(double), 64);
@@ -24,22 +28,27 @@ float main(){
 
     // filling the arrays with random values
     for (i =0; i < (SIZE); i++ ){
-        x[i] = (double)rand() % 100;
-        y[i] = (double)rand() % 100;
-        z[i] = (double)rand() % 100;
-        a[i] = (double)rand() % 100;
+        x[i] =  (double)(1 + rand() % 100);
+        y[i] = (double)(1 + rand() % 100);
+        z[i] = (double)(1 + rand() % 100);
+        a[i] = (double)(1 + rand() % 100);
 
     }
     
    start = omp_get_wtime();
 
-   for (j = 0 ; j < 1000000;i++){
-       for(i = 0; i < 1000;i++) {
-        z[i] = (a[i] * x[i]) + y[i];
+   for (j = 0 ; j < 1000000;j++){
+       for(i = 0; i < SIZE;i++) {
+            z[i] = (a[i] * x[i]) + y[i];
         }
    }
 
     end = omp_get_wtime();
-    printf ("Elapsed Time %f", end-start);
+    printf ("Elapsed Time: %f\n",(double) end-start);
+
+    _mm_free(x);
+    _mm_free(y);
+    _mm_free(z);
+    _mm_free(a);
 
 }
